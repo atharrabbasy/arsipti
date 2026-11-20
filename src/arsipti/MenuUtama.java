@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class MenuUtama {
 
@@ -166,21 +170,39 @@ public class MenuUtama {
         Map<String, Long> perKategori = arsip.jumlahPerKategori();
         if (perKategori.isEmpty()) {
             System.out.println("Belum ada dokumen yang disetujui.");
-            return;
-        }
-        System.out.println("Jumlah dokumen per kategori:");
-        for (Map.Entry<String, Long> e : perKategori.entrySet()) {
-            System.out.println(" " + e.getKey() + " : " + e.getValue());
-        }
-        List<Dokumen> top = arsip.terpopuler(3);
-        if (top.isEmpty()) {
-            System.out.println("Belum ada dokumen yang diunduh.");
+            
         } else {
-            System.out.println("Dokumen terpopuler:");
-            for (int i = 0; i < top.size(); i++) {
-                Dokumen d = top.get(i);
-                System.out.println(" " + (i + 1) + ". " + d.getId() + " " + d.getJudul()  + " (" + d.getJumlahUnduh() + " unduhan)");
+            System.out.println("Jumlah dokumen per kategori:");
+            for (Map.Entry<String, Long> e : perKategori.entrySet()) {
+                System.out.println(" " + e.getKey() + " : " + e.getValue());
             }
+            List<Dokumen> top = arsip.terpopuler(3);
+            if (top.isEmpty()) {
+                System.out.println("Belum ada dokumen yang diunduh.");
+            } else {
+                System.out.println("Dokumen terpopuler:");
+                for (int i = 0; i < top.size(); i++) {
+                    Dokumen d = top.get(i);
+                    System.out.println(" " + (i + 1) + ". " + d.getId() + " " + d.getJudul()  + " (" + d.getJumlahUnduh() + " unduhan)");
+                }
+            }
+        }
+        cetakFakta();
+    }
+
+    private void cetakFakta() {
+        List<String> fakta = arsip.faktaProlog();
+        System.out.println();
+        System.out.println("Fakta Prolog (prasyarat/2 ditulis manual dii knowledge_base.pl:");
+        for (String baris : fakta) {
+            System.out.println(baris);
+        }
+        try {
+            Files.write(Path.of("fakta_arsip.pl"), fakta, StandardCharsets.UTF_8);
+            System.out.println();
+            System.out.println("Fakta juga disimpan ke file fakta_arsip.pl.");
+        } catch (IOException e) {
+            System.out.println("Fakta tidak dapat disimpan ke file: " + e.getMessage());
         }
     }
 
