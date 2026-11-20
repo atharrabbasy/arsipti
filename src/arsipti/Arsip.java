@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class Arsip {
 
@@ -118,6 +119,57 @@ public class Arsip {
                         .thenComparing(Dokumen::getId))
                 .limit(n)
                 .collect(Collectors.toList());
+    }
+
+    public List<String> faktaProlog() {
+        List<String>  f = new ArrayList<>();
+        f.add(":- dynamic matkul/1, dokumen_matkul/2, kategori_dokumen/2, disetujui/1, sedang_ambil/2, pernah_unduh/2.");
+
+        f.add("");
+        f.add("% matkul/1");
+        for (String m : kodeMatkulValid){
+            f.add("matkul(" + atom(m) + ").");
+        }
+        f.add("");
+        f.add("% dokumen_matkul/2");
+        for (Dokumen d : dokumen.values()) {
+            f.add("dokumen_matkul(" + atom(d.getId()) + ", " + atom(d.getKodeMatkul()) + ").");
+        }
+        f.add("");
+        f.add("% kategori_dokumen/2");
+        for (Dokumen d : dokumen.values()) {
+            f.add("Kategori_dokumen(" + atom(d.getId()) + ", " + atom(d.getKategori()) + ").");
+        }
+        f.add("");
+        f.add("% disetujui/1 (hanya dokumen berstatus DISETUJUI)");
+        for (Dokumen d : dokumen.values()) {
+            if (d.getStatus() == Dokumen.Status.DISETUJUI) {
+                f.add("disetujui(" + atom(d.getId()) + ").");
+            }
+        }
+        f.add("");
+        f.add("% sedang_ambil/2");
+        for (Pengguna p : pengguna.values()) {
+            for (String m : new TreeSet<>(p.getMatkulDiambil())) { 
+                f.add("sedang_ambil(" + atom(p.getId()) + ", " + atom(m) +").");
+            }
+        }
+        f.add("");
+        f.add("% pernah_unduh/2");
+        for (Pengguna p : pengguna.values()) {
+            for (String idDok : new TreeSet<>(p.getRiwayatUnduh())) {
+                f.add("pernah_unduh(" + atom(p.getId()) + ", " + atom(idDok) + ").");
+            }
+        }
+        return f;
+    }
+
+    private static String atom(String teks) {
+        String a = teks == null ? "" : teks.trim().toLowerCase().replaceAll("[^a-z0-9_", "_");
+        if (a.isEmpty() || !Character.isLetter(a.charAt(0))) {
+            a = "x" + a;
+        }
+        return a;
     }
 
 
