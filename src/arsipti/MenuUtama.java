@@ -106,7 +106,7 @@ public class MenuUtama {
             String id = arsip.unggah(idUser, d);
             System.out.println("Berhasil. ID dokumen " + id +" (status " + d.getStatus() + "), kode arsip " + d.buatKodeArsip());
         } catch (ArsipException e) {
-            System.out.println("Gagagl: " + e.getMessage());
+            System.out.println("Gagal: " + e.getMessage());
         }
     }
 
@@ -124,7 +124,7 @@ public class MenuUtama {
         String idAdmin = baca("ID admin: ").trim();
         String idDok = baca("ID dokumen: ").trim();
         String keputusan = baca("Keputusan (s = setujui, t = tolak): ").trim().toLowerCase();
-        if (!keputusan.equals("s") && keputusan.equals("t")) {
+        if (!keputusan.equals("s") && !keputusan.equals("t")) {
             System.out.println("Gagal: keputusan harus s atau t.");
             return;
         }
@@ -207,7 +207,7 @@ public class MenuUtama {
     }
 
     private void muatDataContoh() {
-        if (arsip.cariPengguna("a1001") != null) {
+        if (arsip.cariPengguna("a001") != null) {
             System.out.println("Data contoh sudah dimuat.");
             return;
         }

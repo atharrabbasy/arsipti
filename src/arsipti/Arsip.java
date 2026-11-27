@@ -138,7 +138,7 @@ public class Arsip {
         f.add("");
         f.add("% kategori_dokumen/2");
         for (Dokumen d : dokumen.values()) {
-            f.add("Kategori_dokumen(" + atom(d.getId()) + ", " + atom(d.getKategori()) + ").");
+            f.add("kategori_dokumen(" + atom(d.getId()) + ", " + atom(d.getKategori()) + ").");
         }
         f.add("");
         f.add("% disetujui/1 (hanya dokumen berstatus DISETUJUI)");
@@ -165,7 +165,7 @@ public class Arsip {
     }
 
     private static String atom(String teks) {
-        String a = teks == null ? "" : teks.trim().toLowerCase().replaceAll("[^a-z0-9_", "_");
+        String a = teks == null ? "" : teks.trim().toLowerCase().replaceAll("[^a-z0-9_]", "_");
         if (a.isEmpty() || !Character.isLetter(a.charAt(0))) {
             a = "x" + a;
         }

@@ -49,9 +49,20 @@ public class Pengguna implements Divalidasi {
         riwayatUnduh.add(idDokumen);
     }
 
-    public String getId() { return id; }
-    public String getNama() { return nama; }
-    public String getPeran() { return peran; }
-    public Set<String> getMatkulDiambil() { return matkulDiambil; }
-    public Set<String> getRiwayatUnduh() { return riwayatUnduh; }
+    public String getId() {
+        return id;
+    }
+    public String getNama() {
+        return nama;
+    }
+    public String getPeran() {
+        return peran;
+    }
+    public Set<String> getMatkulDiambil() { 
+        return Set.copyOf(matkulDiambil);
+    }
+    public Set<String> getRiwayatUnduh() { 
+        return Set.copyOf(riwayatUnduh);
+    
+    }
 }
