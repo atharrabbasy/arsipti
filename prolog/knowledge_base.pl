@@ -11,7 +11,7 @@ harus_dikuasai(MK, P) :- prasyarat(MK, P).
 harus_dikuasai(MK, P) :- prasyarat(MK, Y), harus_dikuasai(Y, P).
 
 relevan(MK, MK).
-relevan(MK, P) :- harus_Dikuasai(MK, P).
+relevan(MK, P) :- harus_dikuasai(MK, P).
 
 saran_dokumen(M, D) :-
     sedang_ambil(M, MK),
